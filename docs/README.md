@@ -106,7 +106,22 @@ A tecnologia é usada como ferramenta de inclusão social e sanitária, tornando
 
 | Integrante | Matrícula | Papel no Projeto | Responsabilidades |
 
+
 | Mariana Ferreira Dos Santos | 2326630 | **Garantia de Qualidade (QA)** | Elaboração do Relatório e Teste de Funcionalidades. |
 | Francisco Ivamar Silva Leite | [matrícula] | **Gerenciamento de Requisitos** | Documentação e Gestão de Casos de Teste. |
 | Isaias Porto de Freitas | 2326193 | **Arquiteto Backend/API** | Desenvolvimento do Frontend Mobile (Kotlin) e Frontend Web (React.js). |
 | Eugenio Sancho Barroso Neto | 2323811 | **Arquiteto Backend/API** | Definição da Arquitetura, Modelagem de Dados (PostgreSQL) e Desenvolvimento da API. |
+
+**Fase 4: Finalização e Testes** | Revisão de Código, Testes de Integração e Geração do APK Final. 
+
+## 9. Integrantes da Equipe e Seus Papéis
+
+
+Mariana Ferreira Dos Santos | **Relatorio e Teste.** | Relatório e Teste. |
+
+Francisco Ivamar Silva Leite | **matrícula** | Relatório e Teste. |
+
+Isaias Porto de Freitas | **matrícula** | Desenvolvimento. |
+
+Eugenio Sancho Barroso Neto | **Desenvolvimento.** | Desenvolvimento.
+
