@@ -95,24 +95,14 @@ A tecnologia é usada como ferramenta de inclusão social e sanitária, tornando
 
 ## 8.Cronograma para Etapa 2 (N708)
 
-| Fase | Duração | Foco Principal |
+| Fase | Foco Principal |
 
-| **Fase 1: Configuração e Base de Dados** | 3 Semanas | Modelagem final do PostgreSQL. Configuração do Node.js/Prisma e Endpoints base. |
-| **Fase 2: Frontend e Gestão de Animais** | 4 Semanas | Desenvolvimento do Frontend (Web/Mobile) para Cadastro e Listagem. Implementação da Persistência de Dados. |
-| **Fase 3: Módulos de Adoção e Voluntários** | 3 Semanas | Desenvolvimento do Módulo de Adoção e Tarefas para ambas as plataformas. Implementação da lógica de Alerta de Saúde (Mobile). |
-| **Fase 4: Finalização e Testes** | 2 Semanas | Testes de Integração (API $\leftrightarrow$ Frontends). Revisão de Código e Preparação para Deploy. |
+| **Fase 1: Configuração e Base de Dados** | Modelagem final do PostgreSQL. Configuração do Node.js/Prisma e Endpoints base. |
+| **Fase 2: Frontend e Gestão de Animais** | Desenvolvimento do Frontend (Web/Mobile) para Cadastro e Listagem. Implementação da Persistência de Dados. |
+| **Fase 3: Módulos de Adoção e Voluntários** | Desenvolvimento do Módulo de Adoção e Tarefas para ambas as plataformas. Implementação da lógica de Alerta de Saúde (Mobile). |
+| **Fase 4: Finalização e Testes** | Testes de Integração (API $\leftrightarrow$ Frontends). Revisão de Código e Preparação para Deploy. |
 
-## 9.Integrantes da Equipe e Seus Papéis
-
-| Integrante | Matrícula | Papel no Projeto | Responsabilidades |
-
-
-| Mariana Ferreira Dos Santos | 2326630 | **Garantia de Qualidade (QA)** | Elaboração do Relatório e Teste de Funcionalidades. |
-| Francisco Ivamar Silva Leite | [matrícula] | **Gerenciamento de Requisitos** | Documentação e Gestão de Casos de Teste. |
-| Isaias Porto de Freitas | 2326193 | **Arquiteto Backend/API** | Desenvolvimento do Frontend Mobile (Kotlin) e Frontend Web (React.js). |
-| Eugenio Sancho Barroso Neto | 2323811 | **Arquiteto Backend/API** | Definição da Arquitetura, Modelagem de Dados (PostgreSQL) e Desenvolvimento da API. |
-
-**Fase 4: Finalização e Testes** | Revisão de Código, Testes de Integração e Geração do APK Final. 
+**Fase 4: Finalização e Testes** | Revisão de Código, Testes de Integração e Geração do APK e módulo Final. 
 
 ## 9. Integrantes da Equipe e Seus Papéis
 
