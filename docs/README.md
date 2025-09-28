@@ -118,7 +118,6 @@ Fase | Foco Principal
 
 ## 9. Integrantes da Equipe e Seus Papéis
 
-Integrante | Papel no Projeto | Responsabilidades
 
 Mariana Ferreira Dos Santos | **Relatorio e Teste.** | Relatório e Teste. |
 
