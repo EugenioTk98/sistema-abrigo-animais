@@ -1,108 +1,96 @@
-# Modelo de Dados (Diagrama ER Simplificado)
+## Arquivo: `docs/database/database_model.md` (Completo)
 
-O banco de dados utiliza o Room Persistence Library (SQLite) e está na **Versão 3**.
+```markdown
+# 4. Modelo de Dados
 
-<br>
-**[Aqui você deve inserir o Diagrama Entidade-Relacionamento (ER) simplificado]**
-*Nota: Em um diagrama real, as setas e chaves primárias seriam desenhadas. Aqui representamos apenas as Entidades e suas relações.*
-<br>
+O modelo de dados é relacional, projetado para o PostgreSQL (Backend central).
 
 ## 1. Descrição das Entidades e Relacionamentos
 
-| Entidade | Chave Primária (PK) | Chaves Estrangeiras (FK) | Relacionamentos |
-| :--- | :--- | :--- | :--- |
-| **Animal** | `id` (Int) | N/A | 1:1 com (Potencial Adotante) |
-| **Adotante** | `id` (Int) | N/A | N/A |
-| **TarefaVoluntario** | `id` (Int) | N/A | N/A |
-
-## 2. Dicionário de Dados
-
-### Tabela: `animais`
-
-| Campo | Tipo Kotlin | Tipo SQLite | Descrição |
-| :--- | :--- | :--- | :--- |
-| `id` (PK) | Int | INTEGER | ID único do animal. |
-| `nome` | String | TEXT | Nome do animal. |
-| `isCastrado` | Boolean | INTEGER | 1 se castrado, 0 caso contrário. |
-| `ultimaVacinaData` | String? | TEXT | Última data de vacina (formato "YYYY-MM-DD"). |
-| `proximaVacinaData` | String? | TEXT | Data agendada para o alerta de 1 ano. |
-| `fotosUris` | List<String> | TEXT | URIs das fotos (serializadas via Gson). |
-| `dataRegistro` | Long | INTEGER | Timestamp da entrada do animal no sistema. |
-
-### Tabela: `adotantes`
-
-| Campo | Tipo Kotlin | Tipo SQLite | Descrição |
-| :--- | :--- | :--- | :--- |
-| `id` (PK) | Int | INTEGER | ID da solicitação. |
-| `nomeCompleto` | String | TEXT | Nome do candidato. |
-| `telefone` | String | TEXT | Contato principal. |
-| `tipoMoradia` | String | TEXT | Casa, Apartamento, etc. |
-| `statusAprovacao` | String | TEXT | Status da solicitação ('Pendente', 'Aprovado', 'Rejeitado'). |
-
-### Tabela: `tarefas`
-
-| Campo | Tipo Kotlin | Tipo SQLite | Descrição |
-| :--- | :--- | :--- | :--- |
-| `id` (PK) | Int | INTEGER | ID da tarefa. |
-| `titulo` | String | TEXT | Título da tarefa. |
-| `prioridade` | String | TEXT | Nível de urgência ('Alta', 'Média', etc.). |
-| `concluida` | Boolean | INTEGER | 1 se concluída, 0 caso contrário. |
-
-## 5. Arquivo: `docs/api/api_specification.md`
-
-```markdown
-# Especificação de APIs Locais (DAOs)
-
-O sistema utiliza a biblioteca Room para abstrair o acesso ao SQLite. As "APIs" do sistema são os métodos definidos nas interfaces DAO, que são chamados pela camada lógica (Activities/Coroutines).
-
-## 1. Endpoints Previstos (Métodos DAO)
-
-| Componente | Endpoint (Método) | Função |
+| Entidade | Propriedades Chave | Relacionamento Chave |
 | :--- | :--- | :--- |
-| **AnimalDao** | `insert(animal)` | Registra um novo animal no inventário. |
-| | `update(animal)` | Atualiza os dados de saúde e vacina de um animal existente. |
-| | `getById(id)` | Busca um animal específico para visualização de detalhes de saúde. |
-| **AdotanteDao** | `insert(adotante)` | Registra uma nova candidatura de pré-adoção. |
-| | `getAllPendentes()` | Lista todas as candidaturas com `statusAprovacao` = 'Pendente'. |
-| | `updateStatus(id, novoStatus)` | Atualiza o status da candidatura ('Aprovado'/'Rejeitado'). |
-| **TarefaDao** | `insert(tarefa)` | Adiciona uma nova tarefa à lista de pendências. |
-| | `update(tarefa)` | Marca uma tarefa como concluída ou altera seus detalhes. |
-| | `getAll()` | Lista todas as tarefas pendentes, ordenadas por prioridade. |
+| **Animal** | ID, Nome, Raça, Status, Fotos (URIs) | N/A |
+| **Adotante** | ID, Nome, Endereço, TipoMoradia, StatusAprovacao | N/A |
+| **TarefaVoluntario** | ID, Título, Descrição, Prioridade, Concluida | N/A |
+| **HistoricoSaude** (Implícito) | AnimalID (FK), DataVacina, TipoVacina | **Animal** 1:N **HistoricoSaude** (Um animal pode ter muitos registros de saúde) |
 
-## 2. Parâmetros de Requisição (Exemplo)
+## 2. Diagrama ER Simplificado
 
-| Endpoint | Parâmetros de Entrada | Tipo |
-| :--- | :--- | :--- |
-| `AdotanteDao.updateStatus` | `adotanteId` | Int |
-| | `novoStatus` | String (e.g., 'Aprovado') |
-| `AnimalDao.update` | `animal` | Objeto Animal (Entity completo) |
-| `TarefaDao.insert` | `tarefa` | Objeto TarefaVoluntario (Entity completo) |
+Abaixo está a representação simplificada do Diagrama Entidade-Relacionamento, focando nas entidades principais e no relacionamento entre Animais e seu Histórico de Saúde:
 
-## 3. Formatos de Resposta
+```
 
-O sistema utiliza o padrão assíncrono de Kotlin Coroutines (`suspend fun`).
+┌──────────────────────────────────────┐
+│             ANIMAL (PK)              │
+│ ──────────────────────────────────── │
+│ \*animal\_id (PK)                      │
+│ nome                                 │
+│ raça                                 │
+│ status                               │
+└──────────────────────────────────────┘
+|
+| 1:N (Um Animal tem muitos registros de Saúde)
+▼
+┌──────────────────────────────────────┐
+│        HISTORICOSAÚDE (N)            │
+│ ──────────────────────────────────── │
+│ \*saude\_id (PK)                       │
+│  animal\_id (FK) \<────────────────────│
+│  data\_vacina                         │
+│  tipo\_vacina                         │
+└──────────────────────────────────────┘
 
-| Tipo de Resposta | Conteúdo de Retorno | Status Simulado |
-| :--- | :--- | :--- |
-| **Sucesso (CRUD)** | `Unit` (Vazio) | Sucesso na Thread Main (via `Toast`) |
-| **Consulta (Lista)** | `List<Entity>` | Retorna lista de objetos (e.g., `List<Animal>`) |
-| **Consulta (Único)** | `Entity?` | Retorna o objeto (pode ser nulo) |
+┌──────────────────────────────────────┐
+│          ADOTANTE (PK)               │
+│ ──────────────────────────────────── │
+│ \*adotante\_id (PK)                    │
+│ nome\_completo                        │
+│ telefone                             │
+│ status\_aprovacao                     │
+└──────────────────────────────────────┘
 
-## 4. Autenticação e Autorização
+┌──────────────────────────────────────┐
+│      TAREFAVOLUNTARIO (PK)           │
+│ ──────────────────────────────────── │
+│ \*tarefa\_id (PK)                      │
+│ titulo                               │
+│ prioridade                           │
+│ concluida                            │
+└──────────────────────────────────────┘
 
-* **Autenticação (Simulada):** Não há login/senha implementados nesta versão. A autorização é simulada pela navegação interna do `Dashboard` (apenas a equipe tem acesso aos módulos de gestão).
-* **Autorização:** Todos os DAOs são acessíveis pela camada de lógica (Activities), que opera sob a permissão de armazenamento local do Android.
+```
 
-## 5. Exemplos de Chamadas
+## 3. Dicionário de Dados
 
-**Exemplo A: Atualizar Vacina (RF5)**
-```kotlin
-// Chamada da Activity para a Lógica
-scope.launch {
-    // 1. Atualizar o objeto Animal (Entity)
-    // 2. Chamar o DAO para persistência
-    database.animalDao().update(animalAtualizado) 
-    
-    // 3. Chamar o serviço de automação
-    VaccineScheduler.scheduleVaccineReminder(applicationContext, animalAtualizado)
-}
+### Entidade: `Animal`
+
+| Campo | Tipo SQL (PostgreSQL) | Regras | Descrição |
+| :--- | :--- | :--- | :--- |
+| `animal_id` (PK) | SERIAL / UUID | NOT NULL, PK | Identificador único do animal. |
+| `nome` | VARCHAR(100) | NOT NULL | Nome de registro do animal. |
+| `raca` | VARCHAR(100) | NOT NULL | Raça do animal. |
+| `status` | ENUM | NOT NULL | 'Em Adoção', 'Em Tratamento', 'Adotado'. |
+| `is_castrado` | BOOLEAN | NOT NULL | Status de castração. |
+| `ultima_vacina_data` | DATE | NULLABLE | Data da última vacina principal registrada. |
+| `proxima_vacina_alerta` | DATE | NULLABLE | Data calculada para alerta (usada no App/API). |
+| `fotos_uris` | TEXT[] / JSONB | NOT NULL | Lista de caminhos/URIs das fotos. |
+| `observacoes` | TEXT | NULLABLE | Notas de saúde/temperamento. |
+
+### Entidade: `Adotante`
+
+| Campo | Tipo SQL (PostgreSQL) | Regras | Descrição |
+| :--- | :--- | :--- | :--- |
+| `adotante_id` (PK) | SERIAL / UUID | NOT NULL, PK | ID da solicitação/perfil. |
+| `nome_completo` | VARCHAR(255) | NOT NULL | Nome do candidato. |
+| `telefone` | VARCHAR(20) | NOT NULL | Contato. |
+| `tipo_moradia` | VARCHAR(50) | NOT NULL | Tipo de moradia (Casa, Apartamento). |
+| `status_aprovacao` | ENUM | NOT NULL | 'Pendente', 'Aprovado', 'Rejeitado'. |
+
+### Entidade: `TarefaVoluntario`
+
+| Campo | Tipo SQL (PostgreSQL) | Regras | Descrição |
+| :--- | :--- | :--- | :--- |
+| `tarefa_id` (PK) | SERIAL / UUID | NOT NULL, PK | ID da tarefa. |
+| `titulo` | VARCHAR(150) | NOT NULL | Título da tarefa. |
+| `prioridade` | ENUM | NOT NULL | 'Baixa', 'Média', 'Alta', 'URGENTE'. |
+| `concluida` | BOOLEAN | NOT NULL | Status de conclusão (default FALSE). |

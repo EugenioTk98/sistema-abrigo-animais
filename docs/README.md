@@ -2,7 +2,7 @@
 
 ## 1. Título e Descrição do Projeto
 
-O **Sistema de Gestão para Abrigos de Animais** é uma aplicação móvel nativa (Android) projetada para centralizar e automatizar a administração de dados de resgates, saúde, alertas, gestão de voluntariado e gerenciamento de adoções em ONGs e abrigos. A solução visa otimizar as operações de campo e aumentar o foco no bem-estar animal.
+O **Sistema de Gestão para Abrigos de Animais** é uma solução multiplataforma projetada para centralizar e automatizar a administração de dados de resgates, saúde, alertas, gestão de voluntariado e gerenciamento de adoções em ONGs e abrigos. A solução visa otimizar as operações de campo e aumentar o foco no bem-estar animal.
 
 ## 2. Problema Abordado e Justificativa
 
@@ -15,36 +15,34 @@ O **Sistema de Gestão para Abrigos de Animais** é uma aplicação móvel nativ
 * **Garantir o Bem-Estar Animal:** Implementar um sistema de alerta automático (via `AlarmManager`) para eventos médicos cruciais, como a próxima vacinação (365 dias).
 * **Otimizar a Gestão de Adoção:** Criar um módulo de Gerenciamento de Solicitações para facilitar a análise e aprovação de candidatos pela equipe.
 * **Aumentar a Eficiência Operacional:** Fornecer um módulo de Gestão de Tarefas para voluntários, permitindo a criação, priorização e marcação de conclusão de tarefas em campo.
-* **Centralização de Dados:** Manter um banco de dados local (Room) único e seguro para todo o inventário de animais e perfis de adotantes.
+* **Centralização de Dados:** Manter um banco de dados central (PostgreSQL) para todo o inventário de animais e perfis de adotantes.
 
 ## 4. Escopo do Projeto
 
-O escopo do projeto (Etapa 2 - N708) foca exclusivamente no desenvolvimento de um **Aplicativo Móvel Nativo para Android (Kotlin)** contendo os seguintes módulos operacionais completos:
+O escopo do projeto (Etapa 2 - N708) foca no desenvolvimento dos seguintes módulos operacionais completos:
 
-* **Módulo de Animais:** Cadastro e Módulo de Fotos.
+* **Módulo de Animais:** Cadastro (RF1) e Módulo de Fotos.
 * **Módulo de Saúde:** Controle de Vacinas e Alerta.
 * **Módulo de Adoção:** Formulário de Pré-Adoção e Gerenciamento de Status.
 * **Módulo de Voluntários:** Gestão de Criação e Acompanhamento de Tarefas.
 
 ## 5. Visão Geral da Arquitetura
 
-A arquitetura do sistema segue o padrão **MVVM (Model-View-ViewModel)** com princípios de **Clean Architecture**, focando na separação de responsabilidades para escalabilidade e manutenção.
+A arquitetura do sistema segue o padrão **MVVM (Model-View-ViewModel)** com princípios de **Clean Architecture**, utilizando uma arquitetura de **Três Camadas** (Cliente, API e Dados).
 
-* **Camada View (UI):** Activities (Dashboard, MainActivity, DetalhesSaude, etc.) e Adapters. Responsável por renderizar a interface e capturar eventos.
-* **Camada Lógica (ViewModel):** Uso de **Kotlin Coroutines** e classes **Scheduler/Receiver** para a lógica assíncrona, manipulação de dados e automação de alertas.
-* **Camada de Dados (Model):** **Room Persistence Library** (SQLite) como banco de dados local. Contém as Entidades (`Animal`, `Adotante`, `TarefaVoluntario`) e as interfaces DAOs.
+* **Camada Cliente (Mobile):** Kotlin/MVVM para interface e lógica local.
+* **Camada de Aplicação:** Node.js/Express.js (API RESTful) para a lógica de negócios central.
 
-```
 
 ┌────────────────────────────────────────────────────────┐
 │               CAMADA UI / VISUAL (VIEW)                │
 │                                                        │
 │  (Activities: Dashboard, MainActivity, DetalhesSaude)  │
 └────────────────────────────────────────────────────────┘
-│
-│ 1. Evento do Usuário (Clique em "Salvar")
-│
-▼
+                 │
+                 │ 1. Evento do Usuário (Clique em "Salvar")
+                 │
+                 ▼
 ┌────────────────────────────────────────────────────────┐
 │       CAMADA LÓGICA / DADOS (VIEWMODEL - Coroutines)   │
 │                                                        │
@@ -55,75 +53,60 @@ A arquitetura do sistema segue o padrão **MVVM (Model-View-ViewModel)** com pri
 │ (DAO.insert/update)│ (VaccineScheduler.schedule())     │
 └────────────────────▼───────────────────────────────────┐
 
+      │                                                 │
+      │                                                 │
 ┌─────▼─────────────────────────┐                   ┌─────▼───────────────────────────┐
 │     CAMADA DE DADOS (ROOM)    │                   │ SISTEMA ANDROID (AlarmManager)  │
 │                               │                   │                                 │
 │  (AppDatabase, DAOs, Entidades)│                   │ - Agenda o disparo do alarme    │
 │  - Salva dados com sucesso.   │                   │   para a data agendada.         │
 └───────────────────────────────┘                   └─────────┬───────────────────────┘
-│ 3. Disparo na Data/Hora Certa
-│
-▼
-┌───────────────────────────────┐
-│   BROADCAST RECEIVER (RF5)    │
-│ (VaccineReminderReceiver.kt)  │
-│ - Componente de Escuta.       │
-└─────────┬───────────────────────┘
-│ 4. Exibe Notificação ao Usuário
-▼
-(ALERTA DE VACINA)
+                                                              │ 3. Disparo na Data/Hora Certa
+                                                              │
+                                                              ▼
+                                                 ┌───────────────────────────────┐
+                                                 │   BROADCAST RECEIVER (RF5)    │
+                                                 │ (VaccineReminderReceiver.kt)  │
+                                                 │ - Componente de Escuta.       │
+                                                 └─────────┬───────────────────────┘
+                                                           │ 4. Exibe Notificação ao Usuário
+                                                           ▼
+                                                   (ALERTA DE VACINA)
+````
 
-```
+## 6.Tecnologias Propostas
 
-## 6. Tecnologias Propostas
+| Categoria | Tecnologia/Framework | Uso no Projeto |
+| **Frontend Móvel** | Kotlin, Room Persistence Library | Interface de gestão de campo e cache local. |
+| **Frontend Web** | React.js | Interface de gestão geral e consultas. |
+| **Backend/API** | Node.js com Express.js | Servidor de aplicação central (Lógica de Negócios e API RESTful). |
+| **Banco de Dados** | PostgreSQL | Base de dados relacional robusta e centralizada. |
+| **Automação (App)** | AlarmManager e BroadcastReceiver | Disparo de notificações de vacinação agendadas (RF5). |
+| **Serialização** | Gson | Conversor de tipos (`TypeConverter`) para armazenar listas de URIs de fotos. |
 
-Categoria | Tecnologia/Framework | Uso no Projeto |
-
-**Linguagem** | Kotlin | Linguagem de desenvolvimento nativo Android. |
-
-**Arquitetura** | MVVM | Padrão de design para separação da lógica de UI. |
-
-**Persistência Local** | Room Persistence Library (SQLite) | Banco de dados local para dados de animais, adotantes e tarefas. |
-
-**Assíncrono** | Kotlin Coroutines | Gerenciamento de operações de I/O (DAO). |
-
-**Automação** | AlarmManager e BroadcastReceiver | Disparo de notificações de vacinação agendadas. |
-
-**Serialização** | Gson | Conversor de tipos (`TypeConverter`) para armazenar listas de URIs de fotos. |
-
-**UI/Design** | Android View System (XML) e Jetpack Libraries | Construção de interfaces e uso de componentes modernos.
-
-
-## 7. Relação com o ODS 11: Cidades Melhores
+## 7.Relação com o ODS 11: Cidades Melhores
 
 O projeto contribui diretamente para o **ODS 11 (Cidades e Comunidades Sustentáveis)**. Ao fornecer uma solução tecnológica para ONGs, o sistema:
 
-**Aumenta a Capacidade de Gestão:** Ajuda a organizar e controlar a população animal resgatada.
-
-**Promove a Posse Responsável:** Facilita e formaliza o processo de adoção, o que está em linha com o objetivo de tornar assentamentos humanos mais inclusivos e sustentáveis.
+1.  **Aumenta a Capacidade de Gestão:** Ajuda a organizar e controlar a população animal resgatada.
+2.  **Promove a Posse Responsável:** Facilita e formaliza o processo de adoção, o que está em linha com o objetivo de tornar assentamentos humanos mais inclusivos e sustentáveis.
 
 A tecnologia é usada como ferramenta de inclusão social e sanitária, tornando a convivência em comunidade mais segura e humana, o que está em linha com o objetivo de tornar assentamentos humanos inclusivos e sustentáveis.
 
-## 8. Cronograma para Etapa 2 (N708)
+## 8.Cronograma para Etapa 2 (N708)
 
-Fase | Foco Principal 
+| Fase | Duração | Foco Principal |
 
-**Fase 1: Configuração e Base de Dados** | Configuração do Ambiente e Room. Implementação do Cadastro de Animais e Módulo de Fotos.
+| **Fase 1: Configuração e Base de Dados** | 3 Semanas | Modelagem final do PostgreSQL. Configuração do Node.js/Prisma e Endpoints base. |
+| **Fase 2: Frontend e Gestão de Animais** | 4 Semanas | Desenvolvimento do Frontend (Web/Mobile) para Cadastro e Listagem. Implementação da Persistência de Dados. |
+| **Fase 3: Módulos de Adoção e Voluntários** | 3 Semanas | Desenvolvimento do Módulo de Adoção e Tarefas para ambas as plataformas. Implementação da lógica de Alerta de Saúde (Mobile). |
+| **Fase 4: Finalização e Testes** | 2 Semanas | Testes de Integração (API $\leftrightarrow$ Frontends). Revisão de Código e Preparação para Deploy. |
 
-**Fase 2: Gestão de Adoção e Saúde** | Desenvolvimento do Formulário de Adoção e das Activities de Gerenciamento. Implementação do Seletor de Data e lógica do Alerta de Vacinas.
+## 9.Integrantes da Equipe e Seus Papéis
 
-**Fase 3: Módulo de Voluntários e Automação** | Desenvolvimento completo do Módulo de Gestão de Tarefas. Integração final do AlarmManager e testes de notificação.
+| Integrante | Matrícula | Papel no Projeto | Responsabilidades |
 
-**Fase 4: Finalização e Testes** | Revisão de Código, Testes de Integração e Geração do APK Final. 
-
-## 9. Integrantes da Equipe e Seus Papéis
-
-Integrante | Papel no Projeto | Responsabilidades
-
-Mariana Ferreira Dos Santos | **Relatorio e Teste.** | Relatório e Teste. |
-
-Francisco Ivamar Silva Leite | **matrícula** | Relatório e Teste. |
-
-Isaias Porto de Freitas | **matrícula** | Desenvolvimento. |
-
-Eugenio Sancho Barroso Neto | **Desenvolvimento.** | Desenvolvimento.
+| Mariana Ferreira Dos Santos | 2326630 | **Garantia de Qualidade (QA)** | Elaboração do Relatório e Teste de Funcionalidades. |
+| Francisco Ivamar Silva Leite | [matrícula] | **Gerenciamento de Requisitos** | Documentação e Gestão de Casos de Teste. |
+| Isaias Porto de Freitas | 2326193 | **Arquiteto Backend/API** | Desenvolvimento do Frontend Mobile (Kotlin) e Frontend Web (React.js). |
+| Eugenio Sancho Barroso Neto | 2323811 | **Arquiteto Backend/API** | Definição da Arquitetura, Modelagem de Dados (PostgreSQL) e Desenvolvimento da API. |
