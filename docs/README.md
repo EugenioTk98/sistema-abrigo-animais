@@ -123,6 +123,6 @@ Mariana Ferreira Dos Santos | **Relatorio e Teste.** | Relatório e Teste. |
 
 Francisco Ivamar Silva Leite | **matrícula** | Relatório e Teste. |
 
-Isaias Porto de Freitas | **matrícula** | Desenvolvimento. |
+Isaias Porto de Freitas | matrícula:2326193 | Desenvolvimento. |
 
 Eugenio Sancho Barroso Neto | **Desenvolvimento.** | Desenvolvimento.
