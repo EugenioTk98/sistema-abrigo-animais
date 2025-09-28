@@ -1,4 +1,4 @@
-# 5. Especificação de APIs Locais (DAOs)
+# Especificação de APIs Locais (DAOs)
 
 O sistema utiliza o **Room Persistence Library** (SQLite) como sua API de dados. As interfaces DAO (Data Access Object) definem os contratos de dados para acesso, consulta e modificação das entidades.
 
