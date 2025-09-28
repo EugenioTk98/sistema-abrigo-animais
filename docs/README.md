@@ -2,7 +2,7 @@
 
 ## 1. Título e Descrição do Projeto
 
-O **Sistema de Gestão para Abrigos de Animais** é uma solução multiplataforma projetada para centralizar e automatizar a administração de dados de resgates, saúde, alertas, gestão de voluntariado e gerenciamento de adoções em ONGs e abrigos. A solução visa otimizar as operações de campo e aumentar o foco no bem-estar animal.
+O **Sistema de Gestão para Abrigos de Animais** é uma solução multiplataforma (foco principal no Android App) projetada para centralizar e automatizar a administração de dados de resgates, saúde, alertas, gestão de voluntariado e gerenciamento de adoções em ONGs e abrigos. A solução visa otimizar as operações de campo e aumentar o foco no bem-estar animal.
 
 ## 2. Problema Abordado e Justificativa
 
@@ -12,19 +12,19 @@ O **Sistema de Gestão para Abrigos de Animais** é uma solução multiplataform
 
 ## 3. Objetivos do Sistema
 
-* **Garantir o Bem-Estar Animal:** Implementar um sistema de alerta automático (via `AlarmManager`) para eventos médicos cruciais, como a próxima vacinação (365 dias).
-* **Otimizar a Gestão de Adoção:** Criar um módulo de Gerenciamento de Solicitações para facilitar a análise e aprovação de candidatos pela equipe.
-* **Aumentar a Eficiência Operacional:** Fornecer um módulo de Gestão de Tarefas para voluntários, permitindo a criação, priorização e marcação de conclusão de tarefas em campo.
+* **Garantir o Bem-Estar Animal (RF5):** Implementar um sistema de alerta automático (via `AlarmManager`) para eventos médicos cruciais, como a próxima vacinação (365 dias).
+* **Otimizar a Gestão de Adoção (RF11):** Criar um módulo de Gerenciamento de Solicitações para facilitar a análise e aprovação de candidatos pela equipe.
+* **Aumentar a Eficiência Operacional (RF19):** Fornecer um módulo de Gestão de Tarefas para voluntários, permitindo a criação, priorização e marcação de conclusão de tarefas em campo.
 * **Centralização de Dados:** Manter um banco de dados central (PostgreSQL) para todo o inventário de animais e perfis de adotantes.
 
 ## 4. Escopo do Projeto
 
 O escopo do projeto (Etapa 2 - N708) foca no desenvolvimento dos seguintes módulos operacionais completos:
 
-* **Módulo de Animais:** Cadastro (RF1) e Módulo de Fotos.
-* **Módulo de Saúde:** Controle de Vacinas e Alerta.
-* **Módulo de Adoção:** Formulário de Pré-Adoção e Gerenciamento de Status.
-* **Módulo de Voluntários:** Gestão de Criação e Acompanhamento de Tarefas.
+* **Módulo de Animais:** Cadastro (RF1) e Módulo de Fotos (RF3).
+* **Módulo de Saúde:** Controle de Vacinas e Alerta (RF5).
+* **Módulo de Adoção:** Formulário de Pré-Adoção e Gerenciamento de Status (RF11).
+* **Módulo de Voluntários:** Gestão de Criação e Acompanhamento de Tarefas (RF19).
 
 ## 5. Visão Geral da Arquitetura
 
@@ -33,7 +33,7 @@ A arquitetura do sistema segue o padrão **MVVM (Model-View-ViewModel)** com pri
 * **Camada Cliente (Mobile):** Kotlin/MVVM para interface e lógica local.
 * **Camada de Aplicação:** Node.js/Express.js (API RESTful) para a lógica de negócios central.
 
-
+```markdown
 ┌────────────────────────────────────────────────────────┐
 │               CAMADA UI / VISUAL (VIEW)                │
 │                                                        │
@@ -72,7 +72,7 @@ A arquitetura do sistema segue o padrão **MVVM (Model-View-ViewModel)** com pri
                                                            │ 4. Exibe Notificação ao Usuário
                                                            ▼
                                                    (ALERTA DE VACINA)
-````
+
 
 ## 6.Tecnologias Propostas
 
@@ -117,11 +117,11 @@ A tecnologia é usada como ferramenta de inclusão social e sanitária, tornando
 ## 9. Integrantes da Equipe e Seus Papéis
 
 
-Mariana Ferreira Dos Santos | **Relatorio e Teste.** | Relatório e Teste. |
+Mariana Ferreira Dos Santos | **2326630** | Relatório e Teste. |
 
 Francisco Ivamar Silva Leite | **matrícula** | Relatório e Teste. |
 
-Isaias Porto de Freitas | **matrícula** | Desenvolvimento. |
+Isaias Porto de Freitas | **2326193** | Desenvolvimento. |
 
-Eugenio Sancho Barroso Neto | **Desenvolvimento.** | Desenvolvimento.
+Eugenio Sancho Barroso Neto | **2323811** | Desenvolvimento.
 
