@@ -1,4 +1,4 @@
-# 3. Arquitetura e Decisões Técnicas
+# Arquitetura e Decisões Técnicas
 
 ## 1. Descrição da Arquitetura
 
